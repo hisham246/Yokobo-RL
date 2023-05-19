@@ -45,7 +45,7 @@ print(cst.EPSILON_MOTOR_1)
 # sys.exit()
 
 if __name__ == '__main__':
-    writer = SummaryWriter(comment="-" + "BEOWDA" + "-" + datetime.now().strftime("%Y%m%d-%H%M%S"))
+    writer = SummaryWriter(comment="-" + "BEWODA" + "-" + datetime.now().strftime("%Y%m%d-%H%M%S"))
     env = YokoboEnv()
     agent = Agent(gamma=0.9, epsilon=1.0, batchSize=32, nbrActions=dimActionMotor,
                 epsEnd=0.02, inputDims=dimStateMotor, lr=0.0001, epsDec=1e-2, layersDim=[cst.FC1_DIM, cst.FC2_DIM, cst.FC3_DIM])
