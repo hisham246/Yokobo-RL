@@ -126,5 +126,5 @@ class Agent():
                         else self.epsMin
         
     def save_models(self, reward, episode, tag=""):
-        dirpath = "D:\Students\Hisham Khalil\Yokobo-RL\rl\models"
+        dirpath = os.getcwd() + '\\models\\'
         T.save(self.Q_eval.state_dict(), os.path.join(dirpath,"model_" + str(reward)+ "_" +str(episode) + "_" + tag + ".pth"))
