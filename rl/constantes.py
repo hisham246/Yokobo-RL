@@ -121,7 +121,8 @@ TIME_STEP = 6 # hours
 # STATE OF HUMAN
 EMOTION_NEUTRAL = "neutral"
 # EMOTION = [EMOTION_NEUTRAL, "happy", "sad", "surprise", "anger"]
-EMOTION = [EMOTION_NEUTRAL, "happy", "sad", "anger"]
+# EMOTION = [EMOTION_NEUTRAL, "happy", "sad", "anger"]
+EMOTION = ["neutral", "happy", "sad"]
 EMOTION_BAD = ["sad", "anger"]
 EMOTION_GOOD = ["happy"]
 
