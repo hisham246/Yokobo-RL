@@ -240,10 +240,14 @@ EMOTION_PAD_COLOR = {
 }
 
 # np.linalg.norm(a-b)
+# NEUTRAL_EMOTIONS = {"neutral":["neutral"],
+#                     "happy":["happy", "elated","relaxed","surprised","loved","curious"],
+#                     "anger":["violent","angry","hungry"],
+#                     "sad":["fearful","sad","bored","sleepy"]}
+
 NEUTRAL_EMOTIONS = {"neutral":["neutral"],
                     "happy":["happy", "elated","relaxed","surprised","loved","curious"],
-                    "anger":["violent","angry","hungry"],
-                    "sad":["fearful","sad","bored","sleepy"]}
+                    "sad":["fearful","sad","bored","sleepy", "violent","angry","hungry"]}
 
 def remap_emotion(emo):
     for human_emotion, pad_emo in NEUTRAL_EMOTIONS.items():
