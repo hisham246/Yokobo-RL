@@ -60,7 +60,7 @@ class YokoboEnv(Env):
         self.temperatureIN = 20
         self.temperatureOUT = 20
         self.humidityIN = 50
-        self.hummidityOUT = 50
+        self.humidityOUT = 50
         self.atmosphericPressure = 0
         self.co2Level = 200
         self.PAD = [0, 0, 0]
@@ -153,7 +153,7 @@ class YokoboEnv(Env):
         self.temperatureIN = self.data[3]
         self.temperatureOUT = self.data[4]
         self.humidityIN = self.data[5]
-        self.hummidityOUT = self.data[6]
+        self.humidityOUT = self.data[6]
         self.atmosphericPressure = self.data[7]
         self.co2Level = self.data[8]
 
@@ -307,7 +307,7 @@ class YokoboEnv(Env):
             temperatureIN = self.temperatureIN
             temperatureOUT = self.temperatureOUT
             humidityIN = self.humidityIN
-            hummidityOUT = self.hummidityOUT
+            humidityOUT = self.humidityOUT
             atmosphericPressure = self.atmosphericPressure
             co2Level = self.co2Level
 
@@ -321,7 +321,8 @@ class YokoboEnv(Env):
                 temperatureOUT = temperatureIN
                 # temperatureOUT = round(random.normalvariate(15,5),2)
                 humidityIN = round(random.normalvariate(25,5),2)
-                hummidityOUT = round(random.normalvariate(25,5),2)
+                humidityOUT = humidityIN
+                # hummidityOUT = round(random.normalvariate(25,5),2)
                 co2Level = round(random.normalvariate(400,100),2)
                 
                 # temperatureIN = round(random.uniform(cst.TEMPERATURE_IN_MIN, cst.TEMPERATURE_IN_MAX),2)
@@ -350,7 +351,7 @@ class YokoboEnv(Env):
             return [emo,
                   [random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD))], # PAD not used anymore
                   [fomerArrivalPoint, tuple(newArrivalPoint)],
-                  temperatureIN, temperatureOUT, humidityIN, hummidityOUT, atmosphericPressure, co2Level]
+                  temperatureIN, temperatureOUT, humidityIN, humidityOUT, atmosphericPressure, co2Level]
                   # (random.randint(0, cst.CAMERA_X_SIZE), random.randint(0, cst.CAMERA_Y_SIZE)), (random.randint(0, cst.CAMERA_X_SIZE), random.randint(0, cst.CAMERA_Y_SIZE))
         else:
             return np.zeros(self.observation_shape)
