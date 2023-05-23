@@ -122,7 +122,8 @@ TIME_STEP = 6 # hours
 EMOTION_NEUTRAL = "neutral"
 # EMOTION = [EMOTION_NEUTRAL, "happy", "sad", "surprise", "anger"]
 # EMOTION = [EMOTION_NEUTRAL, "happy", "sad", "anger"]
-EMOTION = ["neutral", "happy", "sad"]
+# EMOTION = ["neutral", "happy", "sad"]
+EMOTION = ["neutral", "active"]
 EMOTION_BAD = ["sad", "anger"]
 EMOTION_GOOD = ["happy"]
 
@@ -246,8 +247,8 @@ EMOTION_PAD_COLOR = {
 #                     "sad":["fearful","sad","bored","sleepy"]}
 
 NEUTRAL_EMOTIONS = {"neutral":["neutral"],
-                    "happy":["happy", "elated","relaxed","surprised","loved","curious"],
-                    "sad":["fearful","sad","bored","sleepy", "violent","angry","hungry"]}
+                    "happy":["happy","elated","relaxed","surprised","loved","curious"],
+                    "sad":["fearful","sad","bored","sleepy","violent","angry","hungry"]}
 
 def remap_emotion(emo):
     for human_emotion, pad_emo in NEUTRAL_EMOTIONS.items():
