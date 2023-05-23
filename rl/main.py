@@ -62,11 +62,11 @@ if __name__ == '__main__':
     for i in range(nbrGames):
 
         if episodes_to_save > 20:
+            avgScore = np.mean(scores[-100:]) if scores else 0
             best_mean_reward = score
             agent.save_models(reward, i, tag="bewoda")
             env.agentLight.save_models(reward, i, tag="light")
 
-            avgScore = np.mean(scores[-100:]) if scores else 0
             info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
             env.saveTrajectory(i, thres=70, info=info)
             now = datetime.now() # current date and time
@@ -80,7 +80,10 @@ if __name__ == '__main__':
         observation = env.reset()
         j=0
         action_list = []
+
+        # Number of steps per interaction
         steps_num = random.randint(300,500)
+
         while not done:
             j+=1
             count_T_network_steps += 1
@@ -126,6 +129,7 @@ if __name__ == '__main__':
             agent.save_models(reward, i, tag="bewoda")
             env.agentLight.save_models(reward, i, tag="light")
 
+            # Cumulative reward
             avgScore = np.mean(scores[-100:]) if scores else 0
             info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
             env.saveTrajectory(i, thres=70, info=info)
@@ -146,7 +150,7 @@ if __name__ == '__main__':
         epsHistory.append(agent.epsilon)
 
         avgScore = np.mean(scores[-100:])
-        writer.add_scalar("reward_100", np.mean(scores[-100:]),i)
+        writer.add_scalar("reward_100", avgScore, i)
         # avgScore = np.mean(scores)
         print("episode ", i, 'score %.2f' % score,
                 'average score %.2f' % avgScore,
