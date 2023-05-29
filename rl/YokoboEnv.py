@@ -318,11 +318,9 @@ class YokoboEnv(Env):
                 # emo = 1
 
                 temperatureIN = round(random.normalvariate(20,5),2)
-                temperatureOUT = temperatureIN
-                # temperatureOUT = round(random.normalvariate(15,5),2)
+                temperatureOUT = round(random.normalvariate(15,5),2)
                 humidityIN = round(random.normalvariate(25,5),2)
-                humidityOUT = humidityIN
-                # hummidityOUT = round(random.normalvariate(25,5),2)
+                humidityOUT = round(random.normalvariate(25,5),2)
                 co2Level = round(random.normalvariate(400,100),2)
                 
                 # temperatureIN = round(random.uniform(cst.TEMPERATURE_IN_MIN, cst.TEMPERATURE_IN_MAX),2)
