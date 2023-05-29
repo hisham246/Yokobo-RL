@@ -82,8 +82,7 @@ if __name__ == '__main__':
         action_list = []
 
         # Number of steps per interaction
-        # steps_num = random.randint(300,500)
-        steps_num = 600
+        steps_num = random.randint(300,500)
 
         while not done:
             j+=1
