@@ -64,7 +64,7 @@ if __name__ == '__main__':
         if episodes_to_save > 20:
             avgScore = np.mean(scores[-100:]) if scores else 0
             best_mean_reward = score
-            agent.save_models(avgScore, i, tag="bewoda")
+            agent.save_models(reward, i, tag="bewoda")
             env.agentLight.save_models(reward, i, tag="light")
 
             info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
