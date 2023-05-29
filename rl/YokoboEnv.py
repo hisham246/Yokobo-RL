@@ -300,8 +300,6 @@ class YokoboEnv(Env):
             self.file.write(cst.SEPARATOR.join(position)+"\n")
         
 
-
-    # executed every step
     def createFakeData(self, type = "random"):
 
         if type == "random":
@@ -320,9 +318,11 @@ class YokoboEnv(Env):
                 # emo = 1
 
                 temperatureIN = round(random.normalvariate(20,5),2)
-                temperatureOUT = round(random.normalvariate(15,5),2)
+                temperatureOUT = temperatureIN
+                # temperatureOUT = round(random.normalvariate(15,5),2)
                 humidityIN = round(random.normalvariate(25,5),2)
-                humidityOUT = round(random.normalvariate(25,5),2)
+                humidityOUT = humidityIN
+                # hummidityOUT = round(random.normalvariate(25,5),2)
                 co2Level = round(random.normalvariate(400,100),2)
                 
                 # temperatureIN = round(random.uniform(cst.TEMPERATURE_IN_MIN, cst.TEMPERATURE_IN_MAX),2)
@@ -450,7 +450,7 @@ class YokoboEnv(Env):
         #     reward += cst.REWARD_GOOD_EMOTION 
 
         # step_number 
-        if len(self.padList) >= 10:
+        if len(self.padList) >= 0:
             
             # last_emotions_yokobo = self.padList
             # last_emotions_remapped = [cst.remap_emotion(cst.padToEmotion(pad)) for pad in last_emotions_yokobo]
@@ -491,9 +491,6 @@ class YokoboEnv(Env):
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
                 print("Reward KL: ", reward)
-        else:
-            reward += round(random.normalvariate(2,0.5),1)
-
 
         # if len(self.padList) > 0:
         #     last_emotions_yokobo = self.padList
