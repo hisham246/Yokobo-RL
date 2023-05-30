@@ -448,7 +448,7 @@ class YokoboEnv(Env):
         #     reward += cst.REWARD_GOOD_EMOTION 
 
         # step_number 
-        if len(self.padList) >= 0:
+        if len(self.padList) >= 10:
             
             # last_emotions_yokobo = self.padList
             # last_emotions_remapped = [cst.remap_emotion(cst.padToEmotion(pad)) for pad in last_emotions_yokobo]
@@ -489,6 +489,8 @@ class YokoboEnv(Env):
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
                 print("Reward KL: ", reward)
+        else:
+            reward += round(random.normalvariate(2,0.5),1)
 
         # if len(self.padList) > 0:
         #     last_emotions_yokobo = self.padList
@@ -604,4 +606,3 @@ class YokoboEnv(Env):
 #obs = env.reset()
 #plt.imshow(obs, cmap="gray", origin='upper')
 #plt.show()
-
