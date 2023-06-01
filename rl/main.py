@@ -19,9 +19,7 @@ from torch.utils.tensorboard import SummaryWriter
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 #dimStateMotor = len(cst.EMOTION) * cst.DIM_PAD * cst.INTENTION_DIM
-# dimStateMotor = 1 + cst.DIM_PAD + cst.INTENTION_DIM + 9 # 1 for the emotion, for the humidity IN/OUT(2), temperature IN/OUT(2), co2 (1) and atm (1), position motor (3)
-dimStateMotor = len(cst.EMOTION) + cst.DIM_PAD + cst.INTENTION_DIM + 9 
-
+dimStateMotor = 1 + cst.DIM_PAD + cst.INTENTION_DIM + 9 # 1 for the emotion, for the humidity IN/OUT(2), temperature IN/OUT(2), co2 (1) and atm (1), position motor (3)
 print("dimStateMotor: " + str(dimStateMotor))
 dimActionMotor = pow(len(cst.ACTIONS), cst.NUMBER_OF_MOTOR)
 
