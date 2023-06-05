@@ -478,7 +478,7 @@ class YokoboEnv(Env):
                 reward += -5000
             else:
                 # print("KL Divergence: ", kl_divergence)
-                constant_val = 10 if kl_divergence < 1.0 else 2
+                constant_val = 4 if kl_divergence < 1.0 else 2
                 kl_divergence = 1e-5 if kl_divergence==0.0 else kl_divergence
                 kl_divergence = -math.log10(abs(kl_divergence))
                 # print("Log KL Divergence: ", kl_divergence)
