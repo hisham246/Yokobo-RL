@@ -159,7 +159,7 @@ class YokoboEnv(Env):
 
         self.human_emotions.append(self.emotion)
         self.sensor_values.append(self.data[3:])
-        print(np.shape(self.sensor_values))
+        # print(np.shape(self.sensor_values))
 
         if updatePad:
             self.PAD = self.yokobo.pad()

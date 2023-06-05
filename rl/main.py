@@ -103,10 +103,10 @@ if __name__ == '__main__':
             # if agent.memCounter >= agent.memSize:
             agent.learn()
 
-            if count_T_network_steps % number_step_to_update_T_network == 0:
-                agent.update_t_target()
-                env.agentLight.update_t_target()
-                count_T_network_steps = 0
+            # if count_T_network_steps % number_step_to_update_T_network == 0:
+            agent.update_t_target()
+            env.agentLight.update_t_target()
+            count_T_network_steps = 0
 
             action_list.append(action)
 
