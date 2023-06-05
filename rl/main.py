@@ -99,6 +99,7 @@ if __name__ == '__main__':
             #env.render()
             time.sleep(cst.SAMPLING_RATE)
 
+            # remove if condition
             if agent.memCounter >= agent.memSize:
                 agent.learn()
 
@@ -115,6 +116,7 @@ if __name__ == '__main__':
             writer.add_scalar("epsilon", agent.epsilon,count_T_network_steps)
             writer.add_scalar("reward", reward,count_T_network_steps)
 
+        # remove if condition for memory
         if agent.memCounter >= agent.memSize:
             agent.update_epsilon()
             env.agentLight.update_epsilon()

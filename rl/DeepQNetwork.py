@@ -117,7 +117,7 @@ class Agent():
         loss = self.Q_eval.loss(qTarget, qEval).to(self.Q_eval.device)
         loss.backward()
         self.Q_eval.optimizer.step()
-    
+    # Soft update change
     def update_t_target(self):
         self.T_network.load_state_dict(self.Q_eval.state_dict())
 

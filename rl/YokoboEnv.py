@@ -314,7 +314,7 @@ class YokoboEnv(Env):
             random_num = random.random()
             if random_num < cst.RANDOM_DATA_EPSILON:
                 # emo = 0
-                emo = random.randint(0, len(cst.EMOTION))
+                emo = random.randint(0, len(cst.EMOTION)-1)
                 # emo = 1
 
                 temperatureIN = round(random.normalvariate(20,5),2)
