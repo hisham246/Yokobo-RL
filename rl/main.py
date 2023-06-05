@@ -100,8 +100,8 @@ if __name__ == '__main__':
             time.sleep(cst.SAMPLING_RATE)
 
             # remove if condition
-            if agent.memCounter >= agent.memSize:
-                agent.learn()
+            # if agent.memCounter >= agent.memSize:
+            agent.learn()
 
             if count_T_network_steps % number_step_to_update_T_network == 0:
                 agent.update_t_target()
@@ -117,9 +117,9 @@ if __name__ == '__main__':
             writer.add_scalar("reward", reward,count_T_network_steps)
 
         # remove if condition for memory
-        if agent.memCounter >= agent.memSize:
-            agent.update_epsilon()
-            env.agentLight.update_epsilon()
+        # if agent.memCounter >= agent.memSize:
+        agent.update_epsilon()
+        env.agentLight.update_epsilon()
         
         # if j > 100:
         #     episodes_to_save += 1
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
         avgScore = np.mean(scores[-100:])
 
-        if (avgScore > best_mean_reward) and (agent.memCounter >= agent.memSize):
+        if (avgScore > best_mean_reward):
             best_mean_reward = avgScore
             agent.save_models(reward, i, tag="bewoda")
             env.agentLight.save_models(reward, i, tag="light")
@@ -151,7 +151,7 @@ if __name__ == '__main__':
         #     # color=color,
         #     # printEach=True
         #     )
-        
+
         writer.add_scalar("reward_100", avgScore, i)
         # avgScore = np.mean(scores)
         print("episode ", i, 'score %.2f' % score,
