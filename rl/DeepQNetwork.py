@@ -25,7 +25,7 @@ class DeepQNetwork(nn.Module):
         self.fct.append(nn.Linear(tempInput, self.nbrActions))
 
         self.optimizer = optim.Adam(self.parameters(), lr=lr) 
-        self.loss = nn.MSELoss()
+        self.loss = nn.SmoothL1Loss()
         self.device = T.device('cuda:0' if T.cuda.is_available() else 'cpu')
         print(self.device)
         print(T.cuda.current_device())
