@@ -117,9 +117,19 @@ class Agent():
         loss = self.Q_eval.loss(qTarget, qEval).to(self.Q_eval.device)
         loss.backward()
         self.Q_eval.optimizer.step()
-    # Soft update change
+
+        # Soft update of the target network's weights
+        # θ′ ← τ θ + (1 −τ )θ′    
     def update_t_target(self):
-        self.T_network.load_state_dict(self.Q_eval.state_dict())
+        # self.T_network.load_state_dict(self.Q_eval.state_dict())
+        self.TAU = 0.005
+
+        self.T_network_state_dict = self.T_network.state_dict()
+        self.Q_eval_state_dict = self.Q_eval.state_dict()
+
+        for key in self.Q_eval_state_dict:
+            self.T_network_state_dict[key] = self.Q_eval_state_dict[key]*self.TAU + self.T_network_state_dict[key]*(1-self.TAU)
+        self.T_network.load_state_dict(self.T_network_state_dict)
 
     def update_epsilon(self):
         self.epsilon = self.epsilon - self.epsDec if self.epsilon > self.epsMin \
