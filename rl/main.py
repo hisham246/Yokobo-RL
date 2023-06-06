@@ -125,10 +125,6 @@ if __name__ == '__main__':
         #     episodes_to_save += 1
         # else:
         #     episodes_to_save = 0
-        scores.append(score)
-        epsHistory.append(agent.epsilon)
-
-        avgScore = np.mean(scores[-100:])
 
         if (avgScore > best_mean_reward):
             best_mean_reward = avgScore
@@ -152,6 +148,11 @@ if __name__ == '__main__':
         #     # printEach=True
         #     )
 
+        scores.append(score)
+        epsHistory.append(agent.epsilon)
+
+        avgScore = np.mean(scores[-100:])
+        
         writer.add_scalar("reward_100", avgScore, i)
         # avgScore = np.mean(scores)
         print("episode ", i, 'score %.2f' % score,
