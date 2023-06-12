@@ -57,7 +57,7 @@ if __name__ == '__main__':
     rewardOverTime = []
     best_reward = 0
     best_file = ""
-    best_mean_reward = -1000
+    best_mean_reward = 0
     episodes_to_save = 0
     for i in range(nbrGames):
 
@@ -126,11 +126,8 @@ if __name__ == '__main__':
         # else:
         #     episodes_to_save = 0
 
-        scores.append(score)
-        avgScore = np.mean(scores[-100:])
-
-        if (avgScore > best_mean_reward):
-            best_mean_reward = avgScore
+        if (score > best_mean_reward):
+            best_mean_reward = score
             agent.save_models(reward, i, tag="bewoda")
             env.agentLight.save_models(reward, i, tag="light")
 
@@ -151,7 +148,10 @@ if __name__ == '__main__':
         #     # printEach=True
         #     )
 
+        scores.append(score)
         epsHistory.append(agent.epsilon)
+
+        avgScore = np.mean(scores[-100:])
 
         writer.add_scalar("reward_100", avgScore, i)
         # avgScore = np.mean(scores)
