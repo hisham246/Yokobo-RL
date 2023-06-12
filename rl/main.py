@@ -57,7 +57,7 @@ if __name__ == '__main__':
     rewardOverTime = []
     best_reward = 0
     best_file = ""
-    best_mean_reward = 0
+    best_mean_reward = -1000
     episodes_to_save = 0
     for i in range(nbrGames):
 
@@ -125,7 +125,7 @@ if __name__ == '__main__':
         #     episodes_to_save += 1
         # else:
         #     episodes_to_save = 0
-        
+
         scores.append(score)
         avgScore = np.mean(scores[-100:])
 
