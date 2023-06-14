@@ -120,7 +120,7 @@ if __name__ == '__main__':
         # if agent.memCounter >= agent.memSize:
         agent.update_epsilon()
         env.agentLight.update_epsilon()
-        
+        env.readData(False)
         # if j > 100:
         #     episodes_to_save += 1
         # else:

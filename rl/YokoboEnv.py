@@ -439,7 +439,7 @@ class YokoboEnv(Env):
         closeColor = False
         self.PAD = self.yokobo.pad()   
         actionLight, closeColor = self.lightAction()
-        self.readData(False) 
+        # self.readData(False) 
         new_yokobo_emotion = cst.remap_emotion(cst.padToEmotion(self.PAD))
 
         # if cst.EMOTION[self.emotion] in cst.EMOTION_BAD:
@@ -484,7 +484,7 @@ class YokoboEnv(Env):
                 # print("Log KL Divergence: ", kl_divergence)
                 reward += kl_divergence * constant_val
 
-            if len(self.padList) == step_number:
+            # if len(self.padList) == step_number:
                 print("Human emotion:", self.emotion)
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
