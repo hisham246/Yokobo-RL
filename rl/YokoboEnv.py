@@ -143,9 +143,12 @@ class YokoboEnv(Env):
         #return self.canvas
         return self.dataExpanded
 
-    def readData(self, updatePad = True):        
-        if cst.FAKE_DATA:
-            self.data = self.createFakeData("random")
+    def readData(self, updatePad = True, sampleNewData = True):
+
+        if cst.FAKE_DATA and sampleNewData:
+            self.data = self.createFakeData(type="random", episodeDone=True)
+        elif cst.FAKE_DATA and sampleNewData == False:
+            self.data = self.createFakeData(type="random", episodeDone=False)
         else:
             self.data = self.nep.readData()
 
@@ -300,8 +303,7 @@ class YokoboEnv(Env):
             self.file.write(cst.SEPARATOR.join(position)+"\n")
         
 
-    def createFakeData(self, type = "random"):
-
+    def createFakeData(self, type = "random", episodeDone = True):
         if type == "random":
             emo = self.emotion
             temperatureIN = self.temperatureIN
@@ -311,46 +313,61 @@ class YokoboEnv(Env):
             atmosphericPressure = self.atmosphericPressure
             co2Level = self.co2Level
 
-            random_num = random.random()
-            if random_num < cst.RANDOM_DATA_EPSILON:
-                # emo = 0
-                emo = random.randint(0, len(cst.EMOTION)-1)
-                # emo = 1
+            if episodeDone:
+                random_num = random.random()
+                if random_num < cst.RANDOM_DATA_EPSILON:
+                    # emo = 0
+                    emo = random.randint(0, len(cst.EMOTION)-1)
+                    # emo = 1
 
-                temperatureIN = round(random.normalvariate(20,5),2)
-                temperatureOUT = round(random.normalvariate(15,5),2)
-                humidityIN = round(random.normalvariate(25,5),2)
-                humidityOUT = round(random.normalvariate(25,5),2)
-                co2Level = round(random.normalvariate(400,100),2)
+                    temperatureIN = round(random.normalvariate(20,5),2)
+                    temperatureOUT = round(random.normalvariate(15,5),2)
+                    humidityIN = round(random.normalvariate(25,5),2)
+                    humidityOUT = round(random.normalvariate(25,5),2)
+                    co2Level = round(random.normalvariate(400,100),2)
+                    
+                    # temperatureIN = round(random.uniform(cst.TEMPERATURE_IN_MIN, cst.TEMPERATURE_IN_MAX),2)
+                    # temperatureOUT = round(random.uniform(cst.TEMPERATURE_OUT_MIN, cst.TEMPERATURE_OUT_MAX),2)
+                    # humidityIN = round(random.uniform(cst.HUMIDITY_IN_MIN, cst.HUMIDITY_IN_MAX),2)
+                    # hummidityOUT = round(random.uniform(cst.HUMIDITY_OUT_MIN, cst.HUMIDITY_OUT_MAX),2)
+                    atmosphericPressure = round(random.uniform(cst.ATMOSPHERIC_PRESSURE_MIN, cst.ATMOSPHERIC_PRESSURE_MAX),2)
+                    atmosphericPressure = 1 if atmosphericPressure > cst.ATMOSPHERIC_PRESSURE_THRESHOLD else 0
+                    # co2Level = round(random.uniform(cst.CO2_LEVEL_MIN, cst.CO2_LEVEL_MAX),2)
                 
-                # temperatureIN = round(random.uniform(cst.TEMPERATURE_IN_MIN, cst.TEMPERATURE_IN_MAX),2)
-                # temperatureOUT = round(random.uniform(cst.TEMPERATURE_OUT_MIN, cst.TEMPERATURE_OUT_MAX),2)
-                # humidityIN = round(random.uniform(cst.HUMIDITY_IN_MIN, cst.HUMIDITY_IN_MAX),2)
-                # hummidityOUT = round(random.uniform(cst.HUMIDITY_OUT_MIN, cst.HUMIDITY_OUT_MAX),2)
-                atmosphericPressure = round(random.uniform(cst.ATMOSPHERIC_PRESSURE_MIN, cst.ATMOSPHERIC_PRESSURE_MAX),2)
-                atmosphericPressure = 1 if atmosphericPressure > cst.ATMOSPHERIC_PRESSURE_THRESHOLD else 0
-                # co2Level = round(random.uniform(cst.CO2_LEVEL_MIN, cst.CO2_LEVEL_MAX),2)
-            
-            # if cst.padToEmotion(self.PAD) in cst.EMOTION:
-            #     if random.uniform(0,1) < cst.RANDOM_MACTH_EMOTION:
-            #         emo = cst.EMOTION.index(cst.padToEmotion(self.PAD))
+                # if cst.padToEmotion(self.PAD) in cst.EMOTION:
+                #     if random.uniform(0,1) < cst.RANDOM_MACTH_EMOTION:
+                #         emo = cst.EMOTION.index(cst.padToEmotion(self.PAD))
 
-            # ---
+                # ---
+                fomerArrivalPoint = self.trajectory[1]
+                newArrivalPoint = [fomerArrivalPoint[0] + random.randint(-cst.RANDOM_DISTANCE_X, cst.RANDOM_DISTANCE_X),
+                                fomerArrivalPoint[1] + random.randint(-cst.RANDOM_DISTANCE_Y, cst.RANDOM_DISTANCE_Y)
+                                ]
+                if newArrivalPoint[0] > cst.CAMERA_X_SIZE: newArrivalPoint[0] = cst.CAMERA_X_SIZE
+                if newArrivalPoint[0] < 0                : newArrivalPoint[0] = 0
+                if newArrivalPoint[1] > cst.CAMERA_Y_SIZE: newArrivalPoint[1] = cst.CAMERA_Y_SIZE
+                if newArrivalPoint[1] < 0                : newArrivalPoint[1] = 0  
 
-            fomerArrivalPoint = self.trajectory[1]
-            newArrivalPoint = [fomerArrivalPoint[0] + random.randint(-cst.RANDOM_DISTANCE_X, cst.RANDOM_DISTANCE_X),
-                               fomerArrivalPoint[1] + random.randint(-cst.RANDOM_DISTANCE_Y, cst.RANDOM_DISTANCE_Y)
-                            ]
-            if newArrivalPoint[0] > cst.CAMERA_X_SIZE: newArrivalPoint[0] = cst.CAMERA_X_SIZE
-            if newArrivalPoint[0] < 0                : newArrivalPoint[0] = 0
-            if newArrivalPoint[1] > cst.CAMERA_Y_SIZE: newArrivalPoint[1] = cst.CAMERA_Y_SIZE
-            if newArrivalPoint[1] < 0                : newArrivalPoint[1] = 0
-
-            return [emo,
-                  [random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD))], # PAD not used anymore
-                  [fomerArrivalPoint, tuple(newArrivalPoint)],
-                  temperatureIN, temperatureOUT, humidityIN, humidityOUT, atmosphericPressure, co2Level]
+                
                   # (random.randint(0, cst.CAMERA_X_SIZE), random.randint(0, cst.CAMERA_Y_SIZE)), (random.randint(0, cst.CAMERA_X_SIZE), random.randint(0, cst.CAMERA_Y_SIZE))
+                return [emo,
+                        [random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD))], # PAD not used anymore
+                        [fomerArrivalPoint, tuple(newArrivalPoint)],
+                        temperatureIN, temperatureOUT, humidityIN, humidityOUT, atmosphericPressure, co2Level]
+            else:
+                fomerArrivalPoint = self.trajectory[1]
+                newArrivalPoint = [fomerArrivalPoint[0] + random.randint(-cst.RANDOM_DISTANCE_X, cst.RANDOM_DISTANCE_X),
+                                fomerArrivalPoint[1] + random.randint(-cst.RANDOM_DISTANCE_Y, cst.RANDOM_DISTANCE_Y)
+                                ]
+                if newArrivalPoint[0] > cst.CAMERA_X_SIZE: newArrivalPoint[0] = cst.CAMERA_X_SIZE
+                if newArrivalPoint[0] < 0                : newArrivalPoint[0] = 0
+                if newArrivalPoint[1] > cst.CAMERA_Y_SIZE: newArrivalPoint[1] = cst.CAMERA_Y_SIZE
+                if newArrivalPoint[1] < 0                : newArrivalPoint[1] = 0  
+
+                return [emo,
+                        [random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD)), random.uniform(min(cst.PAD), max(cst.PAD))], # PAD not used anymore
+                        [fomerArrivalPoint, tuple(newArrivalPoint)],
+                        temperatureIN, temperatureOUT, humidityIN, humidityOUT, atmosphericPressure, co2Level]
         else:
             return np.zeros(self.observation_shape)
 
@@ -439,7 +456,7 @@ class YokoboEnv(Env):
         closeColor = False
         self.PAD = self.yokobo.pad()   
         actionLight, closeColor = self.lightAction()
-        # self.readData(False) 
+        self.readData(updatePad=False, sampleNewData=False) 
         new_yokobo_emotion = cst.remap_emotion(cst.padToEmotion(self.PAD))
 
         # if cst.EMOTION[self.emotion] in cst.EMOTION_BAD:
@@ -525,6 +542,7 @@ class YokoboEnv(Env):
             #rewardLight += cst.TIME_REWARD(duration)
             done = True
             doneLight = True
+            self.readData(updatePad=False, sampleNewData=True)
         
         # Increment the episodic return
         self.ep_return += 1
