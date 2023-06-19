@@ -106,8 +106,6 @@ if __name__ == '__main__':
             # if count_T_network_steps % number_step_to_update_T_network == 0:
             agent.update_t_target()
             env.agentLight.update_t_target()
-            count_T_network_steps = 0
-
             action_list.append(action)
 
             if j>=steps_num:
@@ -120,7 +118,7 @@ if __name__ == '__main__':
         # if agent.memCounter >= agent.memSize:
         agent.update_epsilon()
         env.agentLight.update_epsilon()
-        env.readData(False)
+
         # if j > 100:
         #     episodes_to_save += 1
         # else:
