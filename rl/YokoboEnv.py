@@ -125,7 +125,7 @@ class YokoboEnv(Env):
         self.padList = []
         self.human_emotions = []
         #self.PAD = self.yokobo.pad()
-        self.readData()
+        self.readData(updatePad=True, sampleNewData=True)
 
         if self.trajectory[0] == (-1,-1):
             raise Exception("No body is interacting")
@@ -147,7 +147,7 @@ class YokoboEnv(Env):
 
         if cst.FAKE_DATA and sampleNewData:
             self.data = self.createFakeData(type="random", episodeDone=True)
-        elif cst.FAKE_DATA and sampleNewData == False:
+        elif cst.FAKE_DATA and not sampleNewData:
             self.data = self.createFakeData(type="random", episodeDone=False)
         else:
             self.data = self.nep.readData()
@@ -501,7 +501,7 @@ class YokoboEnv(Env):
                 # print("Log KL Divergence: ", kl_divergence)
                 reward += kl_divergence * constant_val
 
-            # if len(self.padList) == step_number:
+            if len(self.padList) == step_number:
                 print("Human emotion:", self.emotion)
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
