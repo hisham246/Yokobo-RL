@@ -137,5 +137,5 @@ class Agent():
         
     def save_models(self, reward, episode, tag=""):
         dirpath = os.getcwd() + '\\models\\'
-        T.save(self.Q_eval.state_dict(), os.path.join(dirpath,"model_" + str(reward)+ "_" +str(episode) + "_" + tag + ".pth"))
-        
+        T.save(self.Q_eval.state_dict(), os.path.join(dirpath,"model_Q_network_" + str(reward)+ "_" +str(episode) + "_" + tag + ".pth"))
+        T.save(self.T_network.state_dict(), os.path.join(dirpath,"model_T_network_" + str(reward)+ "_" +str(episode) + "_" + tag + ".pth"))
