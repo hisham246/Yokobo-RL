@@ -2,6 +2,7 @@ from fileinput import filename
 import constantes as cst
 import nep 
 import numpy as np
+import pandas as pd
 import torch as T
 import torch.nn as nn
 import torch.nn.functional as F
@@ -49,7 +50,8 @@ if __name__ == '__main__':
     env = YokoboEnv()
     agent = Agent(gamma=0.9, epsilon=1.0, batchSize=32, nbrActions=dimActionMotor,
                 epsEnd=0.02, inputDims=dimStateMotor, lr=0.0001, epsDec=1e-2, layersDim=[cst.FC1_DIM, cst.FC2_DIM, cst.FC3_DIM])
-    scores, epsHistory = [],[]
+    StepRewards, StepRewardsLight = [],[]
+    scores, scoresLight, epsHistory = [],[],[]
     nbrGames = 500 + 1
     number_step_to_update_T_network = 1000
     count_T_network_steps = 0
@@ -76,6 +78,7 @@ if __name__ == '__main__':
             break
 
         score = 0
+        scoreLight = 0
         done = False
         observation = env.reset()
         j=0
@@ -88,9 +91,10 @@ if __name__ == '__main__':
             j+=1
             count_T_network_steps += 1
             action = agent.chooseAction(observation)
-            observation_, reward, done, info = env.step(action, steps_num)
+            observation_, reward, rewardLight, done, info = env.step(action, steps_num)
 
             score += reward
+            scoreLight += rewardLight
             rewardOverTime.append(str(reward))
 
             agent.storeTransition(observation, action, reward, observation_, done)
@@ -108,11 +112,15 @@ if __name__ == '__main__':
             env.agentLight.update_t_target()
             action_list.append(action)
 
+            StepRewards.append(reward)
+            StepRewardsLight.append(rewardLight)
+
             if j>=steps_num:
                 done = True
 
-            writer.add_scalar("epsilon", agent.epsilon,count_T_network_steps)
-            writer.add_scalar("reward", reward,count_T_network_steps)
+            writer.add_scalar("epsilon", agent.epsilon, count_T_network_steps)
+            writer.add_scalar("reward", reward, count_T_network_steps)
+            writer.add_scalar("rewardLight", rewardLight, count_T_network_steps)
 
         # remove if condition for memory
         # if agent.memCounter >= agent.memSize:
@@ -126,8 +134,8 @@ if __name__ == '__main__':
 
         if (score > best_mean_reward):
             best_mean_reward = score
-            agent.save_models(reward, i, tag="bewoda")
-            env.agentLight.save_models(reward, i, tag="light")
+            agent.save_models(score, i, tag="bewoda")
+            env.agentLight.save_models(score, i, tag="light")
 
             # Cumulative reward
             avgScore = np.mean(scores[-100:]) if scores else 0
@@ -147,11 +155,14 @@ if __name__ == '__main__':
         #     )
 
         scores.append(score)
+        scoresLight.append(scoreLight)
         epsHistory.append(agent.epsilon)
 
         avgScore = np.mean(scores[-100:])
+        avgScoreLight = np.mean(scores[-100:])
 
         writer.add_scalar("reward_100", avgScore, i)
+        writer.add_scalar("rewardLight_100", avgScoreLight, i)
         # avgScore = np.mean(scores)
         print("episode ", i, 'score %.2f' % score,
                 'average score %.2f' % avgScore,
@@ -185,11 +196,26 @@ if __name__ == '__main__':
         #     fp.write(';'.join(rewardOverTime))
 
     # env.saveTrajectory(i, thres=70, info=info)
-    plt.plot(scores)
-    plt.show()
+    # plt.plot(scores)
+    # plt.show()
     # with open("./data/rewards-" + now.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + str(i) + ".rwd", 'w') as fp:
     #         fp.write(';'.join(rewardOverTime))
+    # pyplot.hold()
+
     print(f"Best episode{best_file}, with reward {best_reward}")
                
+    step_rewards = {'Movement Agent Rewards': StepRewards, 
+                    'Light Agent Rewards': StepRewardsLight,
+                    'Human Emotion Distribution': env.human_distributions_step,
+                    'Yokobo Emotion Distribution': env.yokobo_distributions_step}
+    
+    episode_rewards = {'Movement Agent Rewards': scores, 
+                       'Light Agent Rewards': scoresLight,
+                       'Human Emotion Distribution': env.human_distributions_episode,
+                       'Yokobo Emotion Distribution': env.yokobo_distributions_episode}
+    
+    step_rewards_df = pd.DataFrame.from_dict(step_rewards)
+    episode_rewards_df = pd.DataFrame.from_dict(episode_rewards)
 
-    #pyplot.hold()
+    step_rewards_df.to_csv("./data/step_rewards.csv", index=False)
+    episode_rewards_df.to_csv('./data/episode_rewards.csv', index=False)

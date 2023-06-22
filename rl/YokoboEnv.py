@@ -54,6 +54,10 @@ class YokoboEnv(Env):
         self.yokobo = Yokobo()  
 
         # Define elements present inside the environment
+        self.human_distributions_step = []
+        self.yokobo_distributions_step = []
+        self.human_distributions_episode = []
+        self.yokobo_distributions_episode = []
         self.data = []
         self.dataExpanded = []
         self.emotion = 0
@@ -482,6 +486,9 @@ class YokoboEnv(Env):
             # last_emotions_remapped_dist_counts = [last_emotions_remapped.count(x) for x in unique_labels]
             last_emotions_remapped_dist = [1e-6 if x==0.0 else x for x in last_emotions_remapped_dist]
 
+            self.human_distributions_step.append(human_emotions_dist)
+            self.yokobo_distributions_step.append(last_emotions_remapped_dist)
+
             # print("Human Emotions: ", human_emotions_dist)
             # print("Yokobo Emotions: ", last_emotions_remapped_dist)
             # print("KL Divergence: ", self.kl_divergence(np.array(human_emotions_dist), np.array(last_emotions_remapped_dist)))
@@ -506,8 +513,13 @@ class YokoboEnv(Env):
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
                 print("Reward KL: ", reward)
+                self.human_distributions_episode.append(human_emotions_dist)
+                self.yokobo_distributions_episode.append(last_emotions_remapped_dist)
         else:
             reward += round(random.normalvariate(2,0.5),1)
+            self.human_distributions.append([0.0 for _ in range(len(cst.EMOTION))])
+            self.yokobo_distributions.append([0.0 for _ in range(len(cst.EMOTION))])
+
 
         # if len(self.padList) > 0:
         #     last_emotions_yokobo = self.padList
@@ -554,7 +566,7 @@ class YokoboEnv(Env):
 
         #print(self.yokobo)
         #return self.canvas, reward, done, []
-        return self.dataExpanded, reward, done, []
+        return self.dataExpanded, reward, rewardLight, done, []
 
     def lightAction(self):
         action = self.agentLight.chooseAction(np.array(self.PAD))
