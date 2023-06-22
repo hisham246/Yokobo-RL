@@ -58,6 +58,7 @@ class YokoboEnv(Env):
         self.yokobo_distributions_step = []
         self.human_distributions_episode = []
         self.yokobo_distributions_episode = []
+        self.human_emotions_total = []
         self.data = []
         self.dataExpanded = []
         self.emotion = 0
@@ -513,6 +514,7 @@ class YokoboEnv(Env):
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
                 print("Reward KL: ", reward)
+                self.human_emotions_total.append(self.emotion)
                 self.human_distributions_step.append(human_emotions_dist)
                 self.yokobo_distributions_step.append(last_emotions_remapped_dist)
                 self.human_distributions_episode.append(human_emotions_dist)
