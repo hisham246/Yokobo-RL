@@ -513,12 +513,14 @@ class YokoboEnv(Env):
                 print(last_emotions_remapped_dist)
                 print(human_emotions_dist)
                 print("Reward KL: ", reward)
+                self.human_distributions_step.append(human_emotions_dist)
+                self.yokobo_distributions_step.append(last_emotions_remapped_dist)
                 self.human_distributions_episode.append(human_emotions_dist)
                 self.yokobo_distributions_episode.append(last_emotions_remapped_dist)
         else:
             reward += round(random.normalvariate(2,0.5),1)
-            self.human_distributions.append([0.0 for _ in range(len(cst.EMOTION))])
-            self.yokobo_distributions.append([0.0 for _ in range(len(cst.EMOTION))])
+            self.human_distributions_step.append([0.0 for _ in range(len(cst.EMOTION))])
+            self.yokobo_distributions_step.append([0.0 for _ in range(len(cst.EMOTION))])
 
 
         # if len(self.padList) > 0:
