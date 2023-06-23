@@ -159,7 +159,7 @@ if __name__ == '__main__':
         epsHistory.append(agent.epsilon)
 
         avgScore = np.mean(scores[-100:])
-        avgScoreLight = np.mean(scores[-100:])
+        avgScoreLight = np.mean(scoresLight[-100:])
 
         writer.add_scalar("reward_100", avgScore, i)
         writer.add_scalar("rewardLight_100", avgScoreLight, i)
@@ -203,19 +203,33 @@ if __name__ == '__main__':
     # pyplot.hold()
 
     print(f"Best episode{best_file}, with reward {best_reward}")
-               
-    step_rewards = {'Movement Agent Rewards': StepRewards, 
-                    'Light Agent Rewards': StepRewardsLight,
-                    'Human Emotion Distribution': env.human_distributions_step,
-                    'Yokobo Emotion Distribution': env.yokobo_distributions_step}
-    
-    episode_rewards = {'Movement Agent Rewards': scores, 
-                       'Light Agent Rewards': scoresLight,
-                       'Human Emotion Distribution': env.human_distributions_episode,
-                       'Yokobo Emotion Distribution': env.yokobo_distributions_episode}
-    
-    step_rewards_df = pd.DataFrame.from_dict(step_rewards)
-    episode_rewards_df = pd.DataFrame.from_dict(episode_rewards)
 
-    step_rewards_df.to_csv("./data/step_rewards.csv", index=False)
-    episode_rewards_df.to_csv('./data/episode_rewards.csv', index=False)
+    human_emotions_step = {'Human Emotion Distribution': env.human_distributions_step}
+    yokobo_emotions_step = {'Yokobo Emotion Distribution': env.yokobo_distributions_step}
+    human_emotions_episode = {'Human Emotion Distribution': env.human_distributions_episode}
+    yokobo_emotions_episode = {'Yokobo Emotion Distribution': env.yokobo_distributions_episode}
+    move_agent_rewards_step = {'Movement Agent Rewards': StepRewards}
+    light_agent_rewards_step = {'Movement Agent Rewards': StepRewardsLight}
+    move_agent_rewards_episode = {'Movement Agent Rewards': scores}
+    light_agent_rewards_episode = {'Light Agent Rewards': scoresLight}
+    TotalEmotions = {'Human Emotions': env.human_emotions_total}
+
+    human_emotions_step_df = pd.DataFrame.from_dict(human_emotions_step)
+    yokobo_emotions_step_df = pd.DataFrame.from_dict(yokobo_emotions_step)
+    human_emotions_episode_df = pd.DataFrame.from_dict(human_emotions_episode)
+    yokobo_emotions_episode_df = pd.DataFrame.from_dict(yokobo_emotions_episode)
+    move_agent_rewards_step_df = pd.DataFrame.from_dict(move_agent_rewards_step)
+    light_agent_rewards_step_df = pd.DataFrame.from_dict(light_agent_rewards_step)
+    move_agent_rewards_episode_df = pd.DataFrame.from_dict(move_agent_rewards_episode)
+    light_agent_rewards_episode_df = pd.DataFrame.from_dict(light_agent_rewards_episode)
+    TotalEmotions_df = pd.DataFrame.from_dict(TotalEmotions)
+
+    human_emotions_step_df.to_csv("./results/human_emotions_step.csv", index=False)
+    yokobo_emotions_step_df.to_csv("./results/yokobo_emotions_step.csv", index=False)
+    human_emotions_episode_df.to_csv("./results/human_emotions_episode.csv", index=False)
+    yokobo_emotions_episode_df.to_csv("./results/yokobo_emotions_episode.csv", index=False)
+    move_agent_rewards_step_df.to_csv("./results/move_agent_rewards_step.csv", index=False)
+    light_agent_rewards_step_df.to_csv("./results/light_agent_rewards_step.csv", index=False)
+    move_agent_rewards_episode_df.to_csv("./results/move_agent_rewards_episode.csv", index=False)
+    light_agent_rewards_episode_df.to_csv("./results/light_agent_rewards_episode.csv", index=False)
+    TotalEmotions_df.to_csv("./results/total_emotions.csv", index=False)
