@@ -132,18 +132,18 @@ if __name__ == '__main__':
         # else:
         #     episodes_to_save = 0
 
-        if (score > best_mean_reward):
-            best_mean_reward = score
-            agent.save_models(score, i, tag="bewoda")
-            env.agentLight.save_models(score, i, tag="light")
+        # if (score > best_mean_reward):
+        #     best_mean_reward = score
+        #     agent.save_models(score, i, tag="bewoda")
+        #     env.agentLight.save_models(score, i, tag="light")
 
-            # Cumulative reward
-            avgScore = np.mean(scores[-100:]) if scores else 0
-            info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
-            env.saveTrajectory(i, thres=70, info=info)
-            now = datetime.now() # current date and time
-            with open("./data/rewards-" + now.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + str(i) + ".rwd", 'w') as fp:
-                fp.write(';'.join(rewardOverTime))
+        #     # Cumulative reward
+        #     avgScore = np.mean(scores[-100:]) if scores else 0
+        #     info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
+        #     env.saveTrajectory(i, thres=70, info=info)
+        #     now = datetime.now() # current date and time
+        #     with open("./data/rewards-" + now.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + str(i) + ".rwd", 'w') as fp:
+        #         fp.write(';'.join(rewardOverTime))
                 
         # cst.ROBOT.plot(        
         #     np.transpose(np.array(env.yokobo.trajectory()[0]), (1,0)),
@@ -160,6 +160,19 @@ if __name__ == '__main__':
 
         avgScore = np.mean(scores[-100:])
         avgScoreLight = np.mean(scoresLight[-100:])
+
+        if (avgScore > best_mean_reward):
+            best_mean_reward = avgScore
+            agent.save_models(score, i, tag="bewoda")
+            env.agentLight.save_models(score, i, tag="light")
+
+            # Cumulative reward
+            avgScore = np.mean(scores[-100:]) if scores else 0
+            info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
+            env.saveTrajectory(i, thres=70, info=info)
+            now = datetime.now() # current date and time
+            with open("./data/rewards-" + now.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + str(i) + ".rwd", 'w') as fp:
+                fp.write(';'.join(rewardOverTime))
 
         writer.add_scalar("reward_100", avgScore, i)
         writer.add_scalar("rewardLight_100", avgScoreLight, i)

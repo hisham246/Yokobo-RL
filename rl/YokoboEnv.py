@@ -480,12 +480,12 @@ class YokoboEnv(Env):
             human_emotions_len = len(human_emotions)
             # human_emotions_dist_counts = [human_emotions.count(x) for x in unique_labels]
             human_emotions_dist = [human_emotions.count(x)/human_emotions_len for x in unique_labels]
-            human_emotions_dist = [1e-6 if x==0.0 else x for x in human_emotions_dist]
+            human_emotions_dist = [1e-6 if x==0.0 else x-((1e-6)*3) for x in human_emotions_dist]
 
             last_emotions_remapped_len = len(last_emotions_remapped)
             last_emotions_remapped_dist = [last_emotions_remapped.count(x)/last_emotions_remapped_len for x in unique_labels]
             # last_emotions_remapped_dist_counts = [last_emotions_remapped.count(x) for x in unique_labels]
-            last_emotions_remapped_dist = [1e-6 if x==0.0 else x for x in last_emotions_remapped_dist]
+            # last_emotions_remapped_dist = [1e-6 if x==0.0 else x for x in last_emotions_remapped_dist]
 
             self.human_distributions_step.append(human_emotions_dist)
             self.yokobo_distributions_step.append(last_emotions_remapped_dist)
@@ -498,16 +498,18 @@ class YokoboEnv(Env):
 
             # kl_divergence = self.kl_divergence(self.softmax(human_emotions_dist_counts), self.softmax(last_emotions_remapped_dist_counts))
             
-            kl_divergence = self.kl_divergence(np.array(human_emotions_dist), np.array(last_emotions_remapped_dist))
+            # kl_divergence = self.kl_divergence(np.array(human_emotions_dist), np.array(last_emotions_remapped_dist))
+            kl_divergence = self.kl_divergence(np.array(last_emotions_remapped_dist),np.array(human_emotions_dist))
+
             if kl_divergence == float("inf") or kl_divergence == float("-inf"):
                 reward += -5000
             else:
                 # print("KL Divergence: ", kl_divergence)
-                constant_val = 10 if kl_divergence < 1.0 else 2
+                # constant_val = 10 if kl_divergence < 1.0 else 2
                 kl_divergence = 1e-5 if kl_divergence==0.0 else kl_divergence
-                kl_divergence = -math.log10(abs(kl_divergence))
+                value = -math.log10(abs(kl_divergence))
                 # print("Log KL Divergence: ", kl_divergence)
-                reward += kl_divergence * constant_val
+                reward += value
 
             if len(self.padList) == step_number:
                 print("Human emotion:", self.emotion)
@@ -515,8 +517,8 @@ class YokoboEnv(Env):
                 print(human_emotions_dist)
                 print("Reward KL: ", reward)
                 self.human_emotions_total.append(self.emotion)
-                self.human_distributions_step.append(human_emotions_dist)
-                self.yokobo_distributions_step.append(last_emotions_remapped_dist)
+                # self.human_distributions_step.append(human_emotions_dist)
+                # self.yokobo_distributions_step.append(last_emotions_remapped_dist)
                 self.human_distributions_episode.append(human_emotions_dist)
                 self.yokobo_distributions_episode.append(last_emotions_remapped_dist)
         else:
