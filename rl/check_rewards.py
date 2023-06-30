@@ -25,12 +25,12 @@ def main():
             output_dict_df[file.split(".")[0]] = process_files(output_dict_df[file.split(".")[0]])
     
     emotions = ["neutral","happy","sad","angry"]
-    plt.plot(output_dict_df["move_agent_rewards_step"][195000:196000])
+    plt.plot(output_dict_df["move_agent_rewards_step"][150000:200000])
 
     fig, axis = plt.subplots(2,2)
     for n, ax in enumerate(axis.flatten()):
-        ax.plot(output_dict_df["yokobo_emotions_step"][195000:196000,n], label="robot_"+emotions[n])
-        ax.plot(output_dict_df["human_emotions_step"][195000:196000,n], label="human_"+emotions[n])
+        ax.plot(output_dict_df["yokobo_emotions_step"][150000:200000,n], label="robot_"+emotions[n])
+        ax.plot(output_dict_df["human_emotions_step"][150000:200000,n], label="human_"+emotions[n])
         ax.legend()
     plt.show()
 
