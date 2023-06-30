@@ -59,7 +59,7 @@ if __name__ == '__main__':
     rewardOverTime = []
     best_reward = 0
     best_file = ""
-    best_mean_reward = 0
+    best_mean_reward = -10000
     episodes_to_save = 0
     for i in range(nbrGames):
 
@@ -161,15 +161,17 @@ if __name__ == '__main__':
         avgScore = np.mean(scores[-100:])
         avgScoreLight = np.mean(scoresLight[-100:])
 
-        if (avgScore > best_mean_reward):
-            best_mean_reward = avgScore
+        print(score)
+        if (score > best_mean_reward):
+            print("here")
+            best_mean_reward = score
             agent.save_models(score, i, tag="bewoda")
             env.agentLight.save_models(score, i, tag="light")
 
             # Cumulative reward
             avgScore = np.mean(scores[-100:]) if scores else 0
             info = "episode {:,} - score {:.2f} - average score {:.2f} - epsilon {:.2f} - gamma {:.2f} - LR {:.4f} - FAKE DATA ".format(i, score, avgScore, agent.epsilon, agent.gamma, agent.lr, str(cst.FAKE_DATA)) 
-            env.saveTrajectory(i, thres=70, info=info)
+            env.saveTrajectory(i, thres=70, info=info)  #change from 0 to 70
             now = datetime.now() # current date and time
             with open("./data/rewards-" + now.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + str(i) + ".rwd", 'w') as fp:
                 fp.write(';'.join(rewardOverTime))

@@ -406,7 +406,7 @@ class YokoboEnv(Env):
         return myVal.rjust(cst.NUMBER_OF_MOTOR, "0")
     
     def kl_divergence(self, p, q):
-        return np.sum(np.where(p != 0, p * np.log(p / q), 0))
+        return np.sum(np.where(p != 0.0, p * np.log(p / q), 0.0))
     
     def js_divergence(self, p, q):
         m = (p + q) / 2
@@ -476,7 +476,7 @@ class YokoboEnv(Env):
             # last_emotions_remapped = [cst.remap_emotion(cst.padToEmotion(pad)) for pad in last_emotions_yokobo]
 
             human_emotions, last_emotions_remapped = self.return_emotion_distribution()
-            unique_labels = set(cst.NEUTRAL_EMOTIONS.keys())
+            unique_labels = cst.NEUTRAL_EMOTIONS_KEYS
             human_emotions_len = len(human_emotions)
             # human_emotions_dist_counts = [human_emotions.count(x) for x in unique_labels]
             human_emotions_dist = [human_emotions.count(x)/human_emotions_len for x in unique_labels]
@@ -505,11 +505,11 @@ class YokoboEnv(Env):
                 reward += -5000
             else:
                 # print("KL Divergence: ", kl_divergence)
-                # constant_val = 10 if kl_divergence < 1.0 else 2
+                constant_val = 10 if kl_divergence < 1.0 else 2
                 kl_divergence = 1e-5 if kl_divergence==0.0 else kl_divergence
                 value = -math.log10(abs(kl_divergence))
                 # print("Log KL Divergence: ", kl_divergence)
-                reward += value
+                reward += value * constant_val
 
             if len(self.padList) == step_number:
                 print("Human emotion:", self.emotion)
