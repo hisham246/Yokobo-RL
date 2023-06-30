@@ -245,6 +245,7 @@ NEUTRAL_EMOTIONS = {"neutral":["neutral"],
                     "happy":["happy", "elated","relaxed","surprised","loved","curious"],
                     "anger":["violent","angry","hungry"],
                     "sad":["fearful","sad","bored","sleepy"]}
+NEUTRAL_EMOTIONS_KEYS = ["neutral", "happy", "sad", "anger"]
 
 # NEUTRAL_EMOTIONS = {"neutral":["neutral"],
 #                     "happy":["happy","elated","relaxed","surprised","loved","curious"],
